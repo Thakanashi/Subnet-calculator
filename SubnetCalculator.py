@@ -1,10 +1,11 @@
+# Created by Michał Słomski
+
 import os
 import socket
 import subprocess
 import sys
 
-
-
+# returns network class
 def get_net_class(first_octet):
     if(first_octet>=0 and first_octet<128):
         return("A class")
@@ -17,14 +18,14 @@ def get_net_class(first_octet):
     else:
         return("E class")
 
-
+# returns ip address from your computer
 def get_ip_address():
     hostname = socket.gethostname()
     ip_address = socket.gethostbyname(hostname)
 
     return ip_address
 
-
+# validate if ip address is correct
 def ip_validation(ip_address):
     address = ip_address.split('.')
     if len(address) !=4:
@@ -37,14 +38,14 @@ def ip_validation(ip_address):
             raise Exception
     return True
 
-
+# This function splits ip and mask
 def split_mask_and_ip(ip_and_mask):
     after_split = ip_and_mask.split('/')
     if(len(after_split)>2):
         raise Exception
     return after_split
 
-
+# This function is parsing your CMD console for looking subnet mask
 def get_subnet_mask():
     ip = get_ip_address()
     proc = subprocess.Popen('ipconfig', stdout=subprocess.PIPE)
@@ -55,26 +56,26 @@ def get_subnet_mask():
     mask = proc.stdout.readline().split(b':')[-1].replace(b' ', b'').decode()
     return mask
 
-
+# This function splits your ip or mask by '.' and converts octets to int
 def convert_to_int(ip_or_mask):
-    ip_or_mask_int = [] #binary
+    ip_or_mask_int = [] # binary
     after_split = ip_or_mask.split('.')
     for i in after_split:
         list.append(ip_or_mask_int, int(i))
     return ip_or_mask_int
 
-
+# This function converts int number to binary number and filling the binary number to maximum eight zeros
 def get_bin(x,n=8):
     return format(x, 'b').zfill(n)
 
-
+# converts list to binary
 def convert_to_binary(list):
     tmp = []
     for i in list:
         tmp.append(get_bin(i, 8))
     return tmp
 
-
+# returns first host address
 def get_first_host_address(list):
     a='001'
     update_last_octet = bin(int(list[3],2) + int(a,2))
@@ -82,6 +83,7 @@ def get_first_host_address(list):
     list[3] = tmp
     return list
 
+# returns last host address
 def get_last_host_address(list):
     a = '001'
     update_last_octet = bin(int(list[3],2) - int(a,2))
@@ -89,7 +91,7 @@ def get_last_host_address(list):
     list[3] = tmp
     return list
 
-
+# returns network address
 def get_network_address(ip,mask):
     after_and_operation = []
     l1 = convert_to_int(ip)
@@ -100,14 +102,14 @@ def get_network_address(ip,mask):
 
     return after_and_operation
 
-
+# returns info if address is public or private
 def get_public_or_private_address(first_octet, second_octet):
     if(first_octet==10 or (first_octet==172 and (second_octet>=16 and second_octet<=31))or(first_octet==192 and second_octet==168)):
         return("Address is private")
     else:
         return("Address is public")
 
-
+# returns broadcast address
 def get_broadcast_address(ip,mask):
     octets_from_broadcast = []
     l1 = convert_to_int(ip)
@@ -118,7 +120,7 @@ def get_broadcast_address(ip,mask):
         octets_from_broadcast.append(tmp[2:].zfill(8))
     return octets_from_broadcast
 
-
+# returns maximum number of hosts
 def get_maximum_number_of_hosts(mask):
     counts_of_1 = 0
     mask = convert_to_binary(convert_to_int(mask))
@@ -127,6 +129,7 @@ def get_maximum_number_of_hosts(mask):
 
     return (2 ** (32-counts_of_1)) -2
 
+# Function for printing binary numbers
 def print_list(list):
      to_write =[]
      count = 0
@@ -142,6 +145,7 @@ def print_list(list):
 
      return to_write
 
+# Function for printing decimal numbers
 def print_decimal_list(list):
      to_write = []
      count = 0
@@ -157,7 +161,7 @@ def print_decimal_list(list):
 
      return to_write
 
-
+# Function which ping if ip address you passed in argument is host address
 def ping(host):
     user_input = input("Do you want to ping host address? (Y/N): ")
 
@@ -167,8 +171,9 @@ def ping(host):
     if(user_input.lower()=='y'):
         r = os.system("ping "+host)
 
-
+# main function which prints results to console and saves this results to .txt file
 def main():
+
     plik = open("results",'a')
     try:
       if len(sys.argv) > 1:
