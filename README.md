@@ -18,4 +18,4 @@ raises exception.
 5. Script displays calculated values in the console and saves this values to a text file
 6. If the given address is the host address, the script asks whether to ping
 for the given address. If the user types Y, the script executes the ping command
-and presents its results.
+and presents results.
