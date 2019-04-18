@@ -2,7 +2,7 @@
 Subnet calculator written in Python.
 1. The script take as an argument the IP address (host or network) with the mask in the following format:
 a.b.c.d / e.f.g.h
-2. If the argument is not given, the script gets the address of the computer on which it's
+2. If the argument is not given, the script gets the address of the computer on which is
 launched
 3. The script checks whether the entered address is a valid IP address. If not,
 raises exception.
